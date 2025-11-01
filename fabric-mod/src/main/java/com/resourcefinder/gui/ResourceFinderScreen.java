@@ -1,6 +1,7 @@
 package com.resourcefinder.gui;
 
 import com.resourcefinder.BlockLocation;
+import com.resourcefinder.NavigationHud;
 import com.resourcefinder.WorldScanner;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -391,7 +392,10 @@ public class ResourceFinderScreen extends Screen {
 				this.close();
 			}
 		} else {
-			// Set navigation target
+			// Set navigation target on client side
+			NavigationHud.set_target(result.position, result.name);
+
+			// Also send command to server for particles
 			String command = String.format("/rf guide %d %d %d",
 				result.position.getX(),
 				result.position.getY(),

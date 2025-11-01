@@ -1,4 +1,5 @@
 {
   "key.resourcefinder.open_gui": "Open Resource Finder GUI",
+  "key.resourcefinder.clear_navigation": "Clear Navigation Target",
   "category.resourcefinder": "Resource Finder"
 }

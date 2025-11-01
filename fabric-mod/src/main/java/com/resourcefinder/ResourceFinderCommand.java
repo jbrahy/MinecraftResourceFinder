@@ -143,7 +143,7 @@ public class ResourceFinderCommand {
 					.formatted(Formatting.AQUA, Formatting.UNDERLINE)
 					.styled(style -> style
 						.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
-							String.format("/rf guide %d %d %d", pos.getX(), pos.getY(), pos.getZ())))
+							String.format("/rfclient guide %d %d %d", pos.getX(), pos.getY(), pos.getZ())))
 						.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 							Text.literal("Click to set navigation target").formatted(Formatting.GREEN))));
 

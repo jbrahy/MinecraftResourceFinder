@@ -16,7 +16,7 @@ import java.util.List;
 
 public class WorldScanner {
 
-	public static List<BlockLocation> findBlocks(ServerWorld world, BlockPos playerPos, String blockId, int maxResults, int searchRadius) {
+	public static List<BlockLocation> findBlocks(ServerWorld world, BlockPos playerPos, String blockId, int maxResultsToDisplay, int searchRadius) {
 		List<BlockLocation> locations = new ArrayList<>();
 
 		Identifier identifier = Identifier.tryParse(blockId);
@@ -72,12 +72,6 @@ public class WorldScanner {
 								double distance = BlockLocation.calculateHorizontalDistance(playerPos, pos);
 								String direction = BlockLocation.calculateDirection(playerPos, pos);
 								locations.add(new BlockLocation(pos, distance, direction));
-
-								if (locations.size() >= maxResults) {
-									System.out.println("ResourceFinder: Found " + locations.size() + " blocks (max reached)");
-									System.out.println("ResourceFinder: Scanned " + chunksScanned + " chunks, checked " + blocksChecked + " blocks");
-									return sortByDistance(locations);
-								}
 							}
 						}
 					}
@@ -87,11 +81,36 @@ public class WorldScanner {
 
 		System.out.println("ResourceFinder: Found " + locations.size() + " blocks");
 		System.out.println("ResourceFinder: Scanned " + chunksScanned + " chunks, checked " + blocksChecked + " blocks");
-		return sortByDistance(locations);
-	}
 
-	private static List<BlockLocation> sortByDistance(List<BlockLocation> locations) {
-		locations.sort(Comparator.comparingDouble(loc -> loc.distance));
-		return locations;
+		// Deduplicate nearby blocks (within 3 block radius)
+		List<BlockLocation> deduplicated = new ArrayList<>();
+		for (BlockLocation loc : locations) {
+			boolean isDuplicate = false;
+			for (BlockLocation existing : deduplicated) {
+				double dx = Math.abs(loc.pos.getX() - existing.pos.getX());
+				double dy = Math.abs(loc.pos.getY() - existing.pos.getY());
+				double dz = Math.abs(loc.pos.getZ() - existing.pos.getZ());
+
+				// If within 3 blocks, consider it a duplicate (same vein/structure)
+				if (dx <= 3 && dy <= 3 && dz <= 3) {
+					isDuplicate = true;
+					break;
+				}
+			}
+			if (!isDuplicate) {
+				deduplicated.add(loc);
+			}
+		}
+
+		System.out.println("ResourceFinder: Deduplicated to " + deduplicated.size() + " unique locations");
+
+		deduplicated.sort(Comparator.comparingDouble(loc -> loc.distance));
+
+		if (deduplicated.size() > maxResultsToDisplay) {
+			deduplicated = deduplicated.subList(0, maxResultsToDisplay);
+			System.out.println("ResourceFinder: Limiting to " + maxResultsToDisplay + " closest blocks");
+		}
+
+		return deduplicated;
 	}
 }

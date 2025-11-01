@@ -16,6 +16,9 @@
 	"entrypoints": {
 		"main": [
 			"com.resourcefinder.ResourceFinderMod"
+		],
+		"client": [
+			"com.resourcefinder.ResourceFinderClient"
 		]
 	},
 	"mixins": [],

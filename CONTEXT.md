@@ -1,7 +1,7 @@
 # ResourceFinder Project Context
 
-**Last Updated:** 2025-10-31 23:27 PST
-**Status:** Build workflow established - Both mods at v1.0.1, centralized jars directory created
+**Last Updated:** 2025-10-31 23:30 PST
+**Status:** Navigation HUD enhanced - v1.0.2 adds coordinates, depth indicator, and 3D distance
 
 ---
 
@@ -74,9 +74,15 @@ ResourceFinder is a comprehensive Minecraft resource locator suite with three co
 ## Current Versions
 
 ### ResourceFinder Mod
-- **Version:** 1.0.1
-- **JAR:** `resourcefinder-1.0.1.jar` (31KB)
-- **Last Build:** 2025-10-31 23:18:00
+- **Version:** 1.0.2
+- **JAR:** `resourcefinder-1.0.2.jar` (32KB)
+- **Last Build:** 2025-10-31 23:30:00
+- **Changes in 1.0.2:**
+  - **Target coordinates display** - Shows [X, Y, Z] of target in navigation HUD
+  - **Separate depth indicator** - RED for "Xm down" (mining), GREEN for "Xm up"
+  - **Horizontal distance** - Shows horizontal distance separately
+  - **Total 3D distance** - Shows total straight-line distance
+  - **Improved panel layout** - Taller panel with organized information
 - **Changes in 1.0.1:**
   - Added integrated navigation HUD with real-time compass
   - Added directional arrow overlay for navigation guidance
@@ -275,13 +281,14 @@ cd /Users/jbrahy/OtherProjects/Minecraft/Location
 #### Centralized JAR Directory:
 ```
 /Users/jbrahy/OtherProjects/Minecraft/jars/
-├── resourcefinder-1.0.1.jar    # Current ResourceFinder build
-└── locationhud-1.0.1.jar       # Current Location HUD build
+├── resourcefinder-1.0.2.jar    # Current ResourceFinder build (32KB)
+└── locationhud-1.0.1.jar       # Current Location HUD build (2.9KB)
 ```
 
 This directory contains the latest builds ready for installation to Minecraft.
 
 #### Version History:
+- **ResourceFinder 1.0.2:** Added coordinates, depth indicator, 3D distance to navigation HUD
 - **ResourceFinder 1.0.1:** Navigation HUD system, GUI interface, deduplication
 - **Location HUD 1.0.1:** Moved to top-left corner to avoid overlap
 

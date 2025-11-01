@@ -1,7 +1,7 @@
 # ResourceFinder Project Context
 
-**Last Updated:** 2025-10-31 23:22 PST
-**Status:** HUD positioning fixed - Location HUD moved to top-left, Navigation HUD on top-right
+**Last Updated:** 2025-10-31 23:27 PST
+**Status:** Build workflow established - Both mods at v1.0.1, centralized jars directory created
 
 ---
 
@@ -88,10 +88,11 @@ ResourceFinder is a comprehensive Minecraft resource locator suite with three co
   - Fixed sorting to scan all chunks first
 
 ### Location HUD Mod
-- **Version:** 1.0.0
-- **JAR:** `locationhud-1.0.0.jar` (2.9KB)
-- **Last Build:** 2025-10-31 23:22:00
+- **Version:** 1.0.1
+- **JAR:** `locationhud-1.0.1.jar` (2.9KB)
+- **Last Build:** 2025-10-31 23:27:00
 - **Position:** Top-left corner (updated from top-right to avoid overlap)
+- **Changes in 1.0.1:** Moved to top-left corner to avoid Navigation HUD overlap
 - **Status:** Stable
 
 ### Python CLI Tool
@@ -229,10 +230,16 @@ if (dx <= 3 && dy <= 3 && dz <= 3) {
 - **Instance:** 1.21.1 (switched from 1.21.10)
 - **Instance Path:** `/Users/jbrahy/Library/Application Support/PrismLauncher/instances/1.21.1`
 - **Fabric Loader:** 0.17.3
+- **Mods Directory:** `/Users/jbrahy/Library/Application Support/PrismLauncher/instances/1.21.1/.minecraft/mods`
 - **Installed Mods:**
   - fabric-api-0.108.0+1.21.1
-  - resourcefinder-1.0.0.jar (current, will update to 1.0.1)
-  - locationhud-1.0.0.jar
+  - resourcefinder-1.0.1.jar (ready to install from jars/)
+  - locationhud-1.0.1.jar (ready to install from jars/)
+
+**Quick Install:**
+```bash
+cp /Users/jbrahy/OtherProjects/Minecraft/jars/*.jar "/Users/jbrahy/Library/Application Support/PrismLauncher/instances/1.21.1/.minecraft/mods/"
+```
 
 ### Build Environment
 ```bash
@@ -245,16 +252,38 @@ java -version  # Should show OpenJDK 21.0.9
 
 # Build ResourceFinder
 cd /Users/jbrahy/OtherProjects/Minecraft/ResourceFinder/fabric-mod
-./gradlew build
+./gradlew clean build
 
 # Build Location HUD (separate mod)
 cd /Users/jbrahy/OtherProjects/Minecraft/Location
-./gradlew build
+./gradlew clean build
 
 # Output JAR locations
 # ResourceFinder: /Users/jbrahy/OtherProjects/Minecraft/ResourceFinder/fabric-mod/build/libs/resourcefinder-1.0.1.jar
-# Location HUD: /Users/jbrahy/OtherProjects/Minecraft/Location/build/libs/locationhud-1.0.0.jar
+# Location HUD: /Users/jbrahy/OtherProjects/Minecraft/Location/build/libs/locationhud-1.0.1.jar
 ```
+
+### Build Workflow & Versioning
+**IMPORTANT:** Every build must increment the patch version and copy JARs to the jars directory.
+
+#### Standard Build Process:
+1. **Increment Version:** Update `mod_version` in `gradle.properties` (e.g., 1.0.1 → 1.0.2)
+2. **Clean Build:** Run `./gradlew clean build`
+3. **Copy to jars:** Copy built JAR to `/Users/jbrahy/OtherProjects/Minecraft/jars/`
+4. **Commit:** Commit version change and update CONTEXT.md
+
+#### Centralized JAR Directory:
+```
+/Users/jbrahy/OtherProjects/Minecraft/jars/
+├── resourcefinder-1.0.1.jar    # Current ResourceFinder build
+└── locationhud-1.0.1.jar       # Current Location HUD build
+```
+
+This directory contains the latest builds ready for installation to Minecraft.
+
+#### Version History:
+- **ResourceFinder 1.0.1:** Navigation HUD system, GUI interface, deduplication
+- **Location HUD 1.0.1:** Moved to top-left corner to avoid overlap
 
 ---
 
@@ -516,15 +545,17 @@ git commit -m "Update context before compaction - $(date +%Y-%m-%d)"
 
 ## Session Summary
 
-**Latest Session (2025-10-31 23:00-23:22):**
+**Latest Session (2025-10-31 23:00-23:27):**
 1. ✅ Implemented NavigationHud.java - Real-time navigation overlay
 2. ✅ Implemented ResourceFinderClientCommand.java - Client-side command system
 3. ✅ Added clear navigation keybind (Press C)
 4. ✅ Integrated HUD with GUI click events
 5. ✅ Built ResourceFinder version 1.0.1 successfully (31KB JAR)
 6. ✅ Fixed HUD overlap - Moved Location HUD to top-left corner
-7. ✅ Rebuilt Location HUD with new positioning (2.9KB JAR)
-8. ✅ Updated CONTEXT.md with all changes
+7. ✅ Rebuilt Location HUD 1.0.1 with new positioning (2.9KB JAR)
+8. ✅ Created centralized jars directory with build workflow
+9. ✅ Established versioning process (increment patch on every build)
+10. ✅ Updated CONTEXT.md with all changes
 
 **Previous Sessions Accomplished:**
 1. ✅ Added full GUI search interface with 4 categories

@@ -1,7 +1,7 @@
 # ResourceFinder Project Context
 
-**Last Updated:** 2025-10-31 23:03 PST
-**Status:** Three mods complete and tested - ResourceFinder with GUI, Location HUD, and Python CLI tool
+**Last Updated:** 2025-10-31 23:18 PST
+**Status:** Navigation HUD system implemented and built - ResourceFinder mod now includes integrated navigation overlay
 
 ---
 
@@ -16,23 +16,45 @@ ResourceFinder is a comprehensive Minecraft resource locator suite with three co
 
 ## Current Session Summary
 
-### Major Features Completed This Session
+### Latest Feature: Navigation HUD System ✅ (2025-10-31 23:18)
+
+**NEW - Integrated Navigation System:**
+- **Real-time HUD overlay** displays navigation info in top-right corner
+- **Distance tracking** updates continuously as you move
+- **Directional compass** shows cardinal direction to target (N, NE, E, etc.)
+- **Vertical indicator** shows if target is above (↑), below (↓), or level (→)
+- **Directional arrow** at bottom-center guides you which way to turn
+- **Client-side tracking** persists until cleared
+- **Keybind:** Press `C` to clear navigation target
+- **Auto-updates** when clicking search results in GUI
+
+#### Files Added
+1. **NavigationHud.java** - HUD rendering system with compass and directional arrow
+2. **ResourceFinderClientCommand.java** - Client-side `/rfclient` commands
+
+#### Files Modified
+1. **ResourceFinderClient.java** - Registered HUD, added clear keybind
+2. **ResourceFinderScreen.java** - Sets HUD target when clicking results
+3. **ResourceFinderCommand.java** - Coordinates now use `/rfclient guide` command
+4. **en_us.json** - Added clear navigation keybind text
+
+### Previous Features Completed
 
 #### 1. ResourceFinder Mod - GUI Interface ✅
 - **Keybind:** Press `R` to open search GUI
 - **Search Categories:** Blocks, Entities, Players, Structures
 - **Live Search:** Type-as-you-go filtering
-- **Click Navigation:** Click results to set waypoints
+- **Click Navigation:** Click results to set waypoints AND activate navigation HUD
 - **Deduplication:** Groups nearby blocks (within 3-block radius) as single location
 - **Enhanced Particles:** Tall beam + glowing ring for visible navigation
 
-#### 2. Location HUD Mod ✅
+#### 2. Location HUD Mod ✅ (Separate Mod)
 - Displays X, Y, Z coordinates in top-right corner
 - Semi-transparent dark box with border
 - Auto-hides when F3 debug is active
 - Client-side only, works on any server
 
-#### 3. Bug Fixes Applied
+#### 3. Bug Fixes Applied (Previous Sessions)
 - **Sorting Bug:** Now scans ALL chunks before sorting (shows actual closest)
 - **Deduplication:** Removes duplicate entries from same vein/structure
 - **Particle Visibility:** Enhanced particle effects (40 particles high, glowing ring)
@@ -43,11 +65,15 @@ ResourceFinder is a comprehensive Minecraft resource locator suite with three co
 ## Current Versions
 
 ### ResourceFinder Mod
-- **Version:** 1.0.1 (about to increment to this)
-- **JAR:** `resourcefinder-1.0.1.jar` (25KB)
-- **Last Build:** 2025-10-31 23:01:54
+- **Version:** 1.0.1
+- **JAR:** `resourcefinder-1.0.1.jar` (31KB)
+- **Last Build:** 2025-10-31 23:18:00
 - **Changes in 1.0.1:**
-  - Added full GUI with search categories
+  - Added integrated navigation HUD with real-time compass
+  - Added directional arrow overlay for navigation guidance
+  - Client-side command system (`/rfclient guide X Y Z [name]`, `/rfclient clear`)
+  - Clear navigation keybind (Press C)
+  - Full GUI with search categories
   - Deduplication of nearby blocks (3-block radius)
   - Enhanced particle markers (taller beam, glowing ring)
   - Fixed sorting to scan all chunks first
@@ -67,18 +93,21 @@ ResourceFinder is a comprehensive Minecraft resource locator suite with three co
 
 ### Project Roots
 ```
-/Users/jbrahy/OtherProjects/Minecraft/DiamondViewer/       # ResourceFinder mod + Python tool
-/Users/jbrahy/OtherProjects/Minecraft/Location/            # Location HUD mod
+/Users/jbrahy/OtherProjects/Minecraft/
+├── ResourceFinder/                                  # ResourceFinder mod + Python tool
+└── Location/                                        # Location HUD mod (separate project)
 ```
 
 ### ResourceFinder Mod (Main Project)
 ```
-/Users/jbrahy/OtherProjects/Minecraft/DiamondViewer/fabric-mod/
-├── build/libs/resourcefinder-1.0.0.jar              # Current build
+/Users/jbrahy/OtherProjects/Minecraft/ResourceFinder/fabric-mod/
+├── build/libs/resourcefinder-1.0.1.jar              # Latest build with navigation HUD
 ├── src/main/java/com/resourcefinder/
 │   ├── ResourceFinderMod.java                       # Server-side mod initializer
-│   ├── ResourceFinderClient.java                    # Client-side initializer (GUI keybind)
-│   ├── ResourceFinderCommand.java                   # Chat commands (/rf, /resourcefinder)
+│   ├── ResourceFinderClient.java                    # Client-side initializer (GUI + navigation keybinds)
+│   ├── ResourceFinderCommand.java                   # Server commands (/rf, /resourcefinder)
+│   ├── ResourceFinderClientCommand.java             # Client commands (/rfclient guide, /rfclient clear) ✨ NEW
+│   ├── NavigationHud.java                           # Navigation HUD overlay renderer ✨ NEW
 │   ├── WorldScanner.java                            # Block scanning with deduplication
 │   ├── BlockLocation.java                           # Location data and calculations
 │   └── gui/
@@ -87,8 +116,8 @@ ResourceFinder is a comprehensive Minecraft resource locator suite with three co
 │       └── SearchResult.java                        # Search result data class
 ├── src/main/resources/
 │   ├── fabric.mod.json                              # Mod metadata
-│   └── assets/resourcefinder/lang/en_us.json       # Localization (keybind names)
-├── gradle.properties                                # Version: 1.0.0 (pending increment to 1.0.1)
+│   └── assets/resourcefinder/lang/en_us.json       # Localization (keybind names, now includes "C" for clear)
+├── gradle.properties                                # Version: 1.0.1
 └── build.gradle                                     # Build configuration
 ```
 
@@ -103,7 +132,7 @@ ResourceFinder is a comprehensive Minecraft resource locator suite with three co
 
 ### Python Tool
 ```
-/Users/jbrahy/OtherProjects/Minecraft/DiamondViewer/
+/Users/jbrahy/OtherProjects/Minecraft/ResourceFinder/
 ├── resource_finder.py                               # Main CLI
 ├── world_parser.py                                  # Anvil world parser
 ├── block_database.py                                # Block ID mappings
@@ -130,15 +159,28 @@ ResourceFinder is a comprehensive Minecraft resource locator suite with three co
   - Sorts by horizontal distance
 
 #### Client-Side Components
-- **ResourceFinderClient:** Registers keybinding and GUI
-  - Keybind: `R` (configurable in controls)
-  - Opens ResourceFinderScreen
+- **ResourceFinderClient:** Registers keybindings, GUI, and navigation HUD
+  - Keybind R: Open search GUI (configurable in controls)
+  - Keybind C: Clear navigation target (configurable in controls)
+  - Registers NavigationHud rendering
+  - Registers client commands
 - **ResourceFinderScreen:** Main GUI interface
   - Search field with live filtering
   - Category tabs: Blocks, Entities, Players, Structures
   - Result list with click-to-navigate
   - Scrollable results (10 per page)
   - Dark UI theme
+  - Clicking results sets navigation HUD target
+- **NavigationHud:** ✨ NEW - Real-time navigation overlay
+  - Top-right panel: Target name, distance, direction, vertical indicator
+  - Bottom-center arrow: Directional guidance based on player facing
+  - Updates every frame while target is set
+  - Calculates relative angle between player yaw and target bearing
+  - Arrow symbols: ▲ (ahead), ◄ (left), ► (right), ▼ (behind)
+- **ResourceFinderClientCommand:** ✨ NEW - Client-side command handler
+  - `/rfclient guide X Y Z [name]` - Sets navigation target with optional name
+  - `/rfclient clear` - Clears navigation target
+  - Syncs with server for particle effects
 
 #### Search Categories
 1. **Blocks:** Search Minecraft block registry, click to scan world
@@ -183,16 +225,24 @@ if (dx <= 3 && dy <= 3 && dz <= 3) {
 
 ### Build Environment
 ```bash
-# Set Java path
-export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
+# Set Java path (required for Gradle)
+export JAVA_HOME=/opt/homebrew/opt/openjdk@21
+export PATH="$JAVA_HOME/bin:$PATH"
+
+# Verify Java
+java -version  # Should show OpenJDK 21.0.9
 
 # Build ResourceFinder
-cd /Users/jbrahy/OtherProjects/Minecraft/DiamondViewer/fabric-mod
-./gradlew clean build
+cd /Users/jbrahy/OtherProjects/Minecraft/ResourceFinder/fabric-mod
+./gradlew build
 
-# Build Location HUD
+# Build Location HUD (separate mod)
 cd /Users/jbrahy/OtherProjects/Minecraft/Location
-./gradlew clean build
+./gradlew build
+
+# Output JAR locations
+# ResourceFinder: /Users/jbrahy/OtherProjects/Minecraft/ResourceFinder/fabric-mod/build/libs/resourcefinder-1.0.1.jar
+# Location HUD: /Users/jbrahy/OtherProjects/Minecraft/Location/build/libs/locationhud-1.0.0.jar
 ```
 
 ---
@@ -235,11 +285,16 @@ cd /Users/jbrahy/OtherProjects/Minecraft/Location
 
 #### Commands
 ```bash
+# Server commands (available everywhere)
 /rf diamond              # Find diamonds
 /rf ancient_debris       # Find ancient debris
 /rf coal                # Find coal
-/rf guide X Y Z         # Set manual navigation target
+/rf guide X Y Z         # Set manual navigation target (particles only)
 /rf clear               # Clear navigation markers
+
+# Client commands (local only)
+/rfclient guide X Y Z [name]  # Set navigation with HUD display
+/rfclient clear               # Clear navigation (same as pressing C)
 ```
 
 #### GUI (Press R)
@@ -247,9 +302,21 @@ cd /Users/jbrahy/OtherProjects/Minecraft/Location
 2. **Select Category:** Click Blocks/Entities/Players
 3. **Search:** Type in search box (e.g., "diamond", "villager")
 4. **Navigate:** Click a result
-   - For blocks: Triggers world scan, then sets navigation
-   - For entities/players: Sets navigation immediately
-5. **Follow:** Look for particle beam marking location
+   - For blocks: Triggers world scan, then sets navigation HUD
+   - For entities/players: Sets navigation HUD immediately
+5. **Follow the HUD:**
+   - **Top-right panel** shows distance and direction
+   - **Bottom arrow** guides which way to turn
+   - **Particle beam** marks exact location
+6. **Clear Navigation:** Press `C` key when done
+
+#### Navigation HUD Features ✨ NEW
+- **Distance:** Real-time distance updates as you move
+- **Direction:** Cardinal direction (N, NE, E, SE, S, SW, W, NW)
+- **Vertical:** ↑ (above you), ↓ (below you), → (same level)
+- **Turn Guidance:** Arrow shows ▲ (ahead), ◄ (left), ► (right), ▼ (behind)
+- **Persistence:** Stays visible until you clear it or set new target
+- **Name Display:** Shows target name (e.g., "diamond_ore", "Villager")
 
 #### Block Aliases
 - diamond, diamonds → minecraft:diamond_ore
@@ -303,19 +370,28 @@ python resource_finder.py --list
 ## Next Steps
 
 ### Immediate
-1. Increment version to 1.0.1 in gradle.properties
-2. Rebuild with new version number
-3. User tests GUI and particle improvements
-4. Verify deduplication working as expected
+1. ✅ Navigation HUD implemented and built
+2. ⏳ Install resourcefinder-1.0.1.jar to Minecraft instance
+3. ⏳ Test navigation HUD in-game
+   - Search for diamonds
+   - Click a result
+   - Verify HUD appears in top-right
+   - Walk toward target and verify distance updates
+   - Test directional arrow at bottom
+   - Test clear navigation (Press C)
 
 ### Future Enhancements
-1. **Structure Search:** Implement structure location (villages, temples, etc.)
-2. **Waypoint System:** Save favorite locations
-3. **Search History:** Remember recent searches
-4. **Map Integration:** Show results on map overlay
-5. **Biome Finder:** Search for specific biomes
-6. **Chest Search:** Find items in chests/containers
-7. **Auto-versioning:** Gradle task to increment patch version
+1. **Waypoint Persistence:** Save navigation targets across sessions
+2. **Multiple Waypoints:** Track multiple locations simultaneously
+3. **Waypoint Management GUI:** List, edit, delete saved waypoints
+4. **Structure Search:** Implement structure location (villages, temples, etc.)
+5. **Search History:** Remember recent searches in GUI
+6. **Map Integration:** Show results on map overlay
+7. **Biome Finder:** Search for specific biomes
+8. **Chest Search:** Find items in chests/containers
+9. **Auto-versioning:** Gradle task to increment patch version
+10. **Navigation Path Line:** Draw a line from player to target
+11. **Minimap Integration:** Show target on minimap if installed
 
 ### Optimization Ideas
 1. Adjust search radius based on render distance
@@ -323,6 +399,7 @@ python resource_finder.py --list
 3. Skip Y-ranges where blocks can't spawn
 4. Parallel chunk scanning
 5. Progress indicator for long scans
+6. Waypoint categories/tags for organization
 
 ---
 
@@ -410,18 +487,33 @@ git commit -m "Update context before compaction - $(date +%Y-%m-%d)"
 ## Important Notes for Next Session
 
 1. **First Action:** Read this CONTEXT.md file
-2. **Version:** Update gradle.properties to 1.0.1 and rebuild
-3. **User Testing:** Get feedback on GUI and particle improvements
-4. **Potential Issues:**
+2. **Version:** 1.0.1 built successfully (2025-10-31 23:18)
+3. **JAR Location:** `/Users/jbrahy/OtherProjects/Minecraft/ResourceFinder/fabric-mod/build/libs/resourcefinder-1.0.1.jar`
+4. **User Testing:** Navigation HUD completed, ready for in-game testing
+5. **Known Issue:** Navigation HUD overlaps with Location HUD (both top-right)
+   - **Solution:** Move one to top-left
+   - **Options:**
+     - Navigation HUD to top-left (makes sense since it's temporary)
+     - Location HUD to top-left (always-on coords on left side)
+6. **Potential Issues:**
    - If GUI doesn't open, check keybind conflicts
    - If particles still not visible, may need continuous spawning
    - If deduplication too aggressive, adjust 3-block radius
+   - HUD positioning may need adjustment based on user preference
 
 ---
 
 ## Session Summary
 
-**What was accomplished:**
+**Latest Session (2025-10-31 23:00-23:18):**
+1. ✅ Implemented NavigationHud.java - Real-time navigation overlay
+2. ✅ Implemented ResourceFinderClientCommand.java - Client-side command system
+3. ✅ Added clear navigation keybind (Press C)
+4. ✅ Integrated HUD with GUI click events
+5. ✅ Built version 1.0.1 successfully (31KB JAR)
+6. ✅ Updated CONTEXT.md with navigation system documentation
+
+**Previous Sessions Accomplished:**
 1. ✅ Added full GUI search interface with 4 categories
 2. ✅ Implemented deduplication (3-block radius grouping)
 3. ✅ Enhanced particle navigation (taller beam + glowing ring)
@@ -430,13 +522,14 @@ git commit -m "Update context before compaction - $(date +%Y-%m-%d)"
 6. ✅ All three tools fully functional
 
 **What's pending:**
-1. ⏳ Increment version to 1.0.1
-2. ⏳ User testing of GUI
+1. ⏳ User testing of navigation HUD system
+2. ⏳ User testing of GUI interface
 3. ⏳ User testing of enhanced particles
 4. ⏳ Structure search implementation
-5. ⏳ Auto-versioning system
+5. ⏳ Waypoint persistence system
+6. ⏳ Auto-versioning system
 
-**Time investment:** ~4 hours total across two sessions
+**Time investment:** ~5 hours total across three sessions
 
 ---
 

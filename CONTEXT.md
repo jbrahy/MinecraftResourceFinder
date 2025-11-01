@@ -1,7 +1,7 @@
 # ResourceFinder Project Context
 
-**Last Updated:** 2025-10-31 23:18 PST
-**Status:** Navigation HUD system implemented and built - ResourceFinder mod now includes integrated navigation overlay
+**Last Updated:** 2025-10-31 23:22 PST
+**Status:** HUD positioning fixed - Location HUD moved to top-left, Navigation HUD on top-right
 
 ---
 
@@ -16,9 +16,17 @@ ResourceFinder is a comprehensive Minecraft resource locator suite with three co
 
 ## Current Session Summary
 
-### Latest Feature: Navigation HUD System ✅ (2025-10-31 23:18)
+### Latest Update: HUD Positioning Fix ✅ (2025-10-31 23:22)
 
-**NEW - Integrated Navigation System:**
+**FIXED - HUD Overlap Issue:**
+- **Location HUD** moved to **top-left corner** (coordinates display)
+- **Navigation HUD** stays at **top-right corner** (navigation info)
+- No more overlapping displays
+- Both HUDs now clearly visible simultaneously
+
+### Navigation HUD System ✅ (2025-10-31 23:18)
+
+**Integrated Navigation System:**
 - **Real-time HUD overlay** displays navigation info in top-right corner
 - **Distance tracking** updates continuously as you move
 - **Directional compass** shows cardinal direction to target (N, NE, E, etc.)
@@ -49,10 +57,11 @@ ResourceFinder is a comprehensive Minecraft resource locator suite with three co
 - **Enhanced Particles:** Tall beam + glowing ring for visible navigation
 
 #### 2. Location HUD Mod ✅ (Separate Mod)
-- Displays X, Y, Z coordinates in top-right corner
+- Displays X, Y, Z coordinates in **top-left corner** (updated 2025-10-31 23:22)
 - Semi-transparent dark box with border
 - Auto-hides when F3 debug is active
 - Client-side only, works on any server
+- Positioned on left to avoid overlap with Navigation HUD (top-right)
 
 #### 3. Bug Fixes Applied (Previous Sessions)
 - **Sorting Bug:** Now scans ALL chunks before sorting (shows actual closest)
@@ -81,7 +90,9 @@ ResourceFinder is a comprehensive Minecraft resource locator suite with three co
 ### Location HUD Mod
 - **Version:** 1.0.0
 - **JAR:** `locationhud-1.0.0.jar` (2.9KB)
-- **Status:** Stable, no changes needed
+- **Last Build:** 2025-10-31 23:22:00
+- **Position:** Top-left corner (updated from top-right to avoid overlap)
+- **Status:** Stable
 
 ### Python CLI Tool
 - **Version:** N/A (script-based)
@@ -324,10 +335,11 @@ cd /Users/jbrahy/OtherProjects/Minecraft/Location
 - emerald, gold, iron, coal, copper, lapis, redstone, quartz
 
 ### Location HUD Mod
-- **Auto-displays** in top-right corner
+- **Auto-displays** in **top-left corner**
 - Shows: X, Y, Z coordinates
 - Auto-hides when F3 debug is active
 - No configuration needed
+- Positioned on left side to avoid overlap with Navigation HUD
 
 ### Python CLI Tool
 ```bash
@@ -490,11 +502,10 @@ git commit -m "Update context before compaction - $(date +%Y-%m-%d)"
 2. **Version:** 1.0.1 built successfully (2025-10-31 23:18)
 3. **JAR Location:** `/Users/jbrahy/OtherProjects/Minecraft/ResourceFinder/fabric-mod/build/libs/resourcefinder-1.0.1.jar`
 4. **User Testing:** Navigation HUD completed, ready for in-game testing
-5. **Known Issue:** Navigation HUD overlaps with Location HUD (both top-right)
-   - **Solution:** Move one to top-left
-   - **Options:**
-     - Navigation HUD to top-left (makes sense since it's temporary)
-     - Location HUD to top-left (always-on coords on left side)
+5. **HUD Positioning:** ✅ RESOLVED - Location HUD moved to top-left corner
+   - Location HUD: Top-left (coordinates always visible)
+   - Navigation HUD: Top-right (temporary navigation info)
+   - No more overlap between the two HUDs
 6. **Potential Issues:**
    - If GUI doesn't open, check keybind conflicts
    - If particles still not visible, may need continuous spawning
@@ -505,13 +516,15 @@ git commit -m "Update context before compaction - $(date +%Y-%m-%d)"
 
 ## Session Summary
 
-**Latest Session (2025-10-31 23:00-23:18):**
+**Latest Session (2025-10-31 23:00-23:22):**
 1. ✅ Implemented NavigationHud.java - Real-time navigation overlay
 2. ✅ Implemented ResourceFinderClientCommand.java - Client-side command system
 3. ✅ Added clear navigation keybind (Press C)
 4. ✅ Integrated HUD with GUI click events
-5. ✅ Built version 1.0.1 successfully (31KB JAR)
-6. ✅ Updated CONTEXT.md with navigation system documentation
+5. ✅ Built ResourceFinder version 1.0.1 successfully (31KB JAR)
+6. ✅ Fixed HUD overlap - Moved Location HUD to top-left corner
+7. ✅ Rebuilt Location HUD with new positioning (2.9KB JAR)
+8. ✅ Updated CONTEXT.md with all changes
 
 **Previous Sessions Accomplished:**
 1. ✅ Added full GUI search interface with 4 categories

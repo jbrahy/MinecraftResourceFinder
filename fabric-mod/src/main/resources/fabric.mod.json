@@ -1,0 +1,28 @@
+{
+	"schemaVersion": 1,
+	"id": "resourcefinder",
+	"version": "${version}",
+	"name": "ResourceFinder",
+	"description": "Find any resource block in your world with in-game commands",
+	"authors": [
+		"ResourceFinder"
+	],
+	"contact": {
+		"homepage": "https://github.com/resourcefinder/resourcefinder"
+	},
+	"license": "MIT",
+	"icon": "assets/resourcefinder/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.resourcefinder.ResourceFinderMod"
+		]
+	},
+	"mixins": [],
+	"depends": {
+		"fabricloader": ">=0.16.0",
+		"minecraft": "~1.21",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

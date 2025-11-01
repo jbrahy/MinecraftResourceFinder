@@ -52,22 +52,30 @@ public class NavigationHud {
 		PlayerEntity player = client.player;
 		BlockPos player_position = player.getBlockPos();
 
-		// Calculate distance and direction
-		double distance = BlockLocation.calculateHorizontalDistance(player_position, target_position);
+		// Calculate distances
+		double horizontal_distance = BlockLocation.calculateHorizontalDistance(player_position, target_position);
+		double total_distance = BlockLocation.calculateDistance(player_position, target_position);
 		String direction = BlockLocation.calculateDirection(player_position, target_position);
 
 		// Calculate vertical difference
 		int vertical_diff = target_position.getY() - player_position.getY();
-		String vertical_indicator = vertical_diff > 0 ? "↑" : (vertical_diff < 0 ? "↓" : "→");
+		String vertical_text;
+		if (vertical_diff > 0) {
+			vertical_text = String.format("%dm up", Math.abs(vertical_diff));
+		} else if (vertical_diff < 0) {
+			vertical_text = String.format("%dm down", Math.abs(vertical_diff));
+		} else {
+			vertical_text = "Same level";
+		}
 
 		// Render HUD in top-right corner
 		int screen_width = context.getScaledWindowWidth();
 		int x_offset = screen_width - 10;
 		int y_offset = 10;
 
-		// Background panel
-		int panel_width = 200;
-		int panel_height = 60;
+		// Background panel (made taller for more info)
+		int panel_width = 220;
+		int panel_height = 90;
 		context.fill(x_offset - panel_width, y_offset, x_offset, y_offset + panel_height, 0xAA000000);
 
 		// Border
@@ -76,44 +84,86 @@ public class NavigationHud {
 		context.fill(x_offset - panel_width, y_offset, x_offset - panel_width + 1, y_offset + panel_height, 0xFF00AAAA); // Left
 		context.fill(x_offset - 1, y_offset, x_offset, y_offset + panel_height, 0xFF00AAAA); // Right
 
+		int text_y = y_offset + 5;
+		int line_height = 12;
+
 		// Title
 		context.drawText(
 			client.textRenderer,
 			Text.literal("Navigation Target").formatted(Formatting.AQUA, Formatting.BOLD),
 			x_offset - panel_width + 5,
-			y_offset + 5,
+			text_y,
 			0xFFFFFF,
 			true
 		);
+		text_y += line_height;
+
+		// Target coordinates
+		String coords_text = String.format("[%d, %d, %d]", target_position.getX(), target_position.getY(), target_position.getZ());
+		context.drawText(
+			client.textRenderer,
+			Text.literal(coords_text).formatted(Formatting.AQUA),
+			x_offset - panel_width + 5,
+			text_y,
+			0xFFFFFF,
+			true
+		);
+		text_y += line_height;
 
 		// Target name
 		context.drawText(
 			client.textRenderer,
 			Text.literal(target_name).formatted(Formatting.YELLOW),
 			x_offset - panel_width + 5,
-			y_offset + 18,
+			text_y,
 			0xFFFFFF,
 			true
 		);
+		text_y += line_height;
 
-		// Distance
-		String distance_text = String.format("Distance: %.0fm", distance);
+		// Horizontal distance
+		String h_distance_text = String.format("Horizontal: %.0fm", horizontal_distance);
 		context.drawText(
 			client.textRenderer,
-			Text.literal(distance_text).formatted(Formatting.WHITE),
+			Text.literal(h_distance_text).formatted(Formatting.WHITE),
 			x_offset - panel_width + 5,
-			y_offset + 30,
+			text_y,
 			0xFFFFFF,
 			true
 		);
+		text_y += line_height;
+
+		// Vertical distance (highlighted for mining)
+		context.drawText(
+			client.textRenderer,
+			Text.literal("Depth: ").formatted(Formatting.WHITE)
+				.append(Text.literal(vertical_text).formatted(vertical_diff < 0 ? Formatting.RED : Formatting.GREEN)),
+			x_offset - panel_width + 5,
+			text_y,
+			0xFFFFFF,
+			true
+		);
+		text_y += line_height;
+
+		// Total 3D distance
+		String total_distance_text = String.format("Total: %.0fm", total_distance);
+		context.drawText(
+			client.textRenderer,
+			Text.literal(total_distance_text).formatted(Formatting.GRAY),
+			x_offset - panel_width + 5,
+			text_y,
+			0xFFFFFF,
+			true
+		);
+		text_y += line_height;
 
 		// Direction
-		String direction_text = String.format("Direction: %s %s", direction, vertical_indicator);
+		String direction_text = String.format("Direction: %s", direction);
 		context.drawText(
 			client.textRenderer,
 			Text.literal(direction_text).formatted(Formatting.GOLD),
 			x_offset - panel_width + 5,
-			y_offset + 42,
+			text_y,
 			0xFFFFFF,
 			true
 		);
